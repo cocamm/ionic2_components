@@ -3,79 +3,109 @@ import {Directive, Component, ElementRef, NgZone} from 'angular2/core';
 import {IONIC_DIRECTIVES, IonicApp} from 'ionic-framework/ionic';
 
 @Component({
-    selector: 'toolbar-scroll',
+    selector: 'toolbar-fade-header',
     template: `
-        <ng-content select="ion-toolbar"></ng-content>
-    `
+        <ion-toolbar toolbar-scroll primary>
+            <ion-buttons left>
+                <button>
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-buttons>
+            <ion-title>Ionic Title</ion-title>
+            <ion-buttons end>
+                <button> 
+                    <ion-icon name="more"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-toolbar>
+    `,
+    directives: [IONIC_DIRECTIVES]
 })
-export class ToolbarScroll {
-    private content: any;
-    private scrollToolbar: any;
-    private toolbar: any;
-    private title: any;
+export class ToolbarFadeHeader {
+    
+    private titleZoom: number = 1.5; 
     private baseDimensions: any;
-    private scroller: HTMLElement;
-
-    constructor(private el: ElementRef, private app: IonicApp) {
-
+    private legacyToolbarHeight: number;
+    private title: HTMLElement; 
+    private background: HTMLElement;    
+    private content: any;
+    private toolbar: HTMLElement;
+    
+    constructor(private el: ElementRef, private _zone : NgZone, private app: IonicApp) { 
+              
     }
-
-    ngAfterViewInit() {
+    
+    ngAfterViewInit() {   
         var self = this;
-
-        self.scrollToolbar = self.el.nativeElement;
-        self.toolbar = self.scrollToolbar.querySelector('.toolbar');
         
-        //self.title = self.scrollToolbar.querySelector('.toolbar-title');
-
-        self.baseDimensions = self.scrollToolbar.getBoundingClientRect();
-        console.log(self.baseDimensions);
-        //self.reloadPosition(self.baseDimensions);
-
-        self.content = self.app.getComponent('toolbar-example');
-        self.scroller = self.content.elementRef.nativeElement.querySelector('scroll-content');
-        self.content.addTouchMoveListener(function() {
-            self.reloadPosition(self.el.nativeElement.getBoundingClientRect());
-        });
-
-        self.content.addScrollEventListener(function() {
-            self.reloadPosition(self.el.nativeElement.getBoundingClientRect());
-        });
+        window.setTimeout(() => {
+            var header = self.el.nativeElement;
+            var width = header.getBoundingClientRect().width;
+            var height = header.getBoundingClientRect().height;
+            
+            self.baseDimensions = { top: 0, bottom: height, left: 0, right: width, width: width, height: height };
+            self.toolbar = header.querySelector('[toolbar-scroll]');
+            self.background = self.toolbar.querySelector('.toolbar-background');
+            self.legacyToolbarHeight = self.getDimensions(self.toolbar).height;
+            self.title = self.toolbar.querySelector('ion-title');        
+            self.handleStyle(self.baseDimensions);
+            self.content = self.app.getComponent('toolbar-example');
+            
+            self.content.addScrollEventListener(function() {
+                 self.reloadStyles();
+            });
+            
+        }, 250);
     }
-
-    reloadPosition(dimensions) {
-        let difference = dimensions.bottom - this.baseDimensions.top;
+    
+    reloadStyles() {        
+        this.handleStyle(this.el.nativeElement.getBoundingClientRect());
+    }
+    
+    handleStyle(dim) {
         
-        console.log(this.scroller.scrollTop);
-        //console.log(this.content.elementRef.nativeElement.getBoundingClientRect());
-        this.toolbar.style.transform = 'translate3d(0px,' + (this.scroller.scrollTop*1) + 'px,0px)'; 
+        let difference = dim.bottom - this.baseDimensions.top;
         
-        this.scrollToolbar.style.transform = 'translate3d(0px,' + (this.scroller.scrollTop * 0.01) * -1 + 'px,0px)'; 
-        
-       // this.scrollToolbar.style.transform = 'translate3d(0px,' + dimensions.top + 'px,0px)'; 
-        
-        
-        
-        if ((difference) > 56) {
-            //this.scrollToolbar.classList.remove('top'); 
-            //this.title.style.transform = 'translateY(' + ((difference) - 56) + 'px)';
-            
-            //this.toolbar.style.height = (difference) + 'px'; 
-            
-            /*if(difference == 205) {
-                this.scrollToolbar.style.transform = 'translate3d(0px,0px,0px)'; 
-                this.toolbar.style.transform = 'translate3d(0px,0px,0px)'; 
-            } else {
-                this.scrollToolbar.style.transform = 'translate3d(0px,-' + difference + 'px,0px)'; 
-                this.toolbar.style.transform = 'translate3d(0px,' + difference + 'px,0px)'; 
-            }*/
-                   
+        if (difference >= 56) {            
+            this.background.style.height = difference + 'px';            
+            this.title.style.transform = 'translate3d(0,' + (difference - this.legacyToolbarHeight) + 'px,0) ' + 
+                        'scale(' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ',' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ')';
+            this.toolbar.style.transform = 'translate3d(0,0,0)';
         } else {
-           // this.scrollToolbar.classList.add('top');
-            //this.content.elementRef.nativeElement.classList.add('toolbar-top');
-        } 
+            this.background.style.height = '56px';
+            this.title.style.transform = 'translate3d(0,0,0)  scale(1,1)';
+            this.toolbar.style.transform = 'translate3d(0,' + (difference - this.legacyToolbarHeight) + 'px,0)';
+        }
         
+        if(difference <= 130) {
+            if(!this.background.classList.contains('fill')) {
+                this.background.classList.add('fill');
+            }
+        } else {
+            this.background.classList.remove('fill');
+        }
         
+        if(difference < 56) {
+            
+            
+            // if(this.el.nativeElement.classList.contains('show-toolbar')) {
+            //     this.el.nativeElement.classList.remove('show-toolbar');
+            // }
+            // this.el.nativeElement.classList.add('hide-toolbar');
+        } else if(difference >= -10) {
+            // if(this.el.nativeElement.classList.contains('hide-toolbar')) {
+            //     this.el.nativeElement.classList.remove('hide-toolbar');
+            // }
+            // this.el.nativeElement.classList.add('show-toolbar');
+        }
+        
+    }
+      
+    ratio(dim) {
+        var r = (dim.bottom - this.baseDimensions.top - 56) / (dim.height);
+        if (r < 0) return 0;
+        if (r > 1) return 1;        
+        return Number(r.toString().match(/^\d+(?:\.\d{0,2})?/));
     }
     
     getDimensions(ele: HTMLElement) {
@@ -89,8 +119,9 @@ export class ToolbarScroll {
             }
             return dimensions;
         } else {
-            // do not cache bad values
+            
             return { width: 0, height: 0, left: 0, top: 0 };
         }
     }
 }
+

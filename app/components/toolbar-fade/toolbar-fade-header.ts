@@ -5,8 +5,11 @@ import {IONIC_DIRECTIVES, IonicApp} from 'ionic-framework/ionic';
 @Component({
     selector: 'toolbar-fade-header',
     template: `
-        <toolbar-background></toolbar-background>
-        <ion-toolbar toolbar-fake secondary></ion-toolbar>
+       
+        <toolbar-background>
+             <toolbar-header-picture><img src="./img/ionic.png" /></toolbar-header-picture>
+        </toolbar-background>
+        <ion-toolbar toolbar-fake primary></ion-toolbar>
         <ion-toolbar toolbar-scroll transparent>
             <ion-buttons left>
                 <button>
@@ -25,13 +28,14 @@ import {IONIC_DIRECTIVES, IonicApp} from 'ionic-framework/ionic';
 })
 export class ToolbarFadeHeader {
     
-    private titleZoom: number = 1.8;
+    private titleZoom: number = 1.5; 
     private baseDimensions: any;
     private legacyToolbarHeight: number;
     private title: HTMLElement; 
     private background: HTMLElement;
     private fakeToolbar: HTMLElement;
     private content: any;
+    private toolbar: HTMLElement;
     
     constructor(private el: ElementRef, private _zone : NgZone, private app: IonicApp) { 
               
@@ -47,20 +51,15 @@ export class ToolbarFadeHeader {
             self.baseDimensions = { top: 0, bottom: height, left: 0, right: width, width: width, height: height };
             self.background = header.querySelector('toolbar-background');
             
-            var toolbar = header.querySelector('[toolbar-scroll]');
-            self.legacyToolbarHeight = self.getDimensions(toolbar).height;
-            self.title = toolbar.querySelector('.toolbar-title');
+            self.toolbar = header.querySelector('[toolbar-scroll]');
+            self.legacyToolbarHeight = self.getDimensions(self.toolbar).height;
+            self.title = self.toolbar.querySelector('.toolbar-title');
             self.fakeToolbar = header.querySelector('[toolbar-fake]');
             self.fakeToolbar.style.height = height + 'px';
             self.fakeToolbar.style.minHeight = self.legacyToolbarHeight+ 'px';
             self.handleStyle(self.baseDimensions);
             
             self.content = self.app.getComponent('toolbar-example');
-            
-            
-            self.content.addTouchMoveListener(function() {
-                //self.reloadStyles();
-            });
             
             self.content.addScrollEventListener(function() {
                  self.reloadStyles();
@@ -75,39 +74,32 @@ export class ToolbarFadeHeader {
     
     handleStyle(dim) {
         let difference = dim.bottom - this.baseDimensions.top;
-        if (difference > 56) {
-            
-            //this.title.style.top = (difference - this.legacyToolbarHeight) + 'px';
-            this.fakeToolbar.style.height = difference + 'px';
-            //this.title.style.transform = 'scale(' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ',' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ')';
-            this.title.style.top = (difference - this.legacyToolbarHeight) + 'px';
-            this.title.style.transform = 'scale(' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ',' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ')';
-        } else {            
-            this.title.style.top = '0px';
+        if (difference >= 56) {            
+            this.fakeToolbar.style.height = difference + 'px';            
+            this.title.style.transform = 'translate3d(0,' + (difference - this.legacyToolbarHeight) + 'px,0) ' + 
+                        'scale(' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ',' + ((this.titleZoom - 1) * this.ratio(dim) + 1) + ')';
+        } else {
             this.fakeToolbar.style.height = '56px';
-            this.title.style.transform = 'scale(1,1)';
-            //this.content.scrollTo(0, 0, 0);
+            this.title.style.transform = 'translate3d(0,0,0)  scale(1,1)';
+            this.fakeToolbar.style.position = 'relative';
+            this.toolbar.style.position = 'relative';             
         }
-        //console.log("diff: " + difference);
-        //console.log(difference - this.legacyToolbarHeight);
-        if (difference - this.legacyToolbarHeight > 0) {
-            
+        
+        let toolbg = this.fakeToolbar.querySelector('.toolbar-background');
+        if(difference <= 130) {
+            if(!toolbg.classList.contains('fill')) {
+                this.fakeToolbar.querySelector('.toolbar-background').classList.add('fill');
+            }
+        } else {
+            this.fakeToolbar.querySelector('.toolbar-background').classList.remove('fill');
         }
-        // if ((dim.bottom - baseDimensions.top) > legacyToolbarH * 2 && fab.hasClass('hide')) {
-        //     //fab.removeClass('hide');
-        // }
-        //this.background.style.opacity = (this.ratio(dim)).toString();
-        //this.fakeToolbar.style.opacity = (1 - this.ratio(dim)).toString();
-        /* Uncomment the line below if you want shadow inside picture (low performance) */
-        //element.css('box-shadow', '0 -'+(dim.height*3/4)+'px '+(dim.height/2)+'px -'+(dim.height/2)+'px rgba(0,0,0,'+ratio(dim)+') inset');
     }
       
     ratio(dim) {
-        var r = (dim.bottom - this.baseDimensions.top) / dim.height;
-        //console.log(dim.bottom);
-        console.log(r);
+        var r = (dim.bottom - this.baseDimensions.top - 56) / (dim.height);
         if (r < 0) return 0;
         if (r > 1) return 1;
+        console.log(r);
         return Number(r.toString().match(/^\d+(?:\.\d{0,2})?/));
     }
     

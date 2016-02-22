@@ -1,34 +1,66 @@
-$default-height: 205px;
-$default-toolbar-height: 56px;
-
-toolbar-scroll {
+toolbar-fade-header {
     display: block;
-    height: $default-height;
-    background-color: #32db64;
-    
-    .toolbar { overflow: visible;  transform: translate3d(0px, 0px, 0px);}
-    
-    .toolbar-title {
-        position: relative;
-        //transform: translateY(150px);
-    }
+    overflow: hidden;
+    position: relative;
+    z-index: 99;
+    height: 205px;
+} 
+
+toolbar-header-picture img {
+    height: 100%;
+    display: block;
 }
 
-toolbar-scroll.top {
-    height: $default-toolbar-height;
-    transition: height 0.2s ease-in-out;
+toolbar-background {
+    display: block;
     
-    .toolbar-background {
-        height: $default-toolbar-height !important;
-        transition: height 0.2s ease-in-out;
-    }
-    
-    .toolbar-title {
-        transform: translateY(0px) !important;
-        transition: transform 0.2s ease-in-out;
-    }
-    
-    //.toolbar { overflow: visible; position: relative !important; }
+    background-color: rgba(56,126,245, 0);
 }
 
-//.toolbar-top scroll-content { padding-top: 60px;}
+
+// toolbar-fade-header [toolbar-fake] {
+//     position: fixed;       
+//     left: 0px;
+//     top: 0px;
+//     width: 100%;
+//     height: 100%;
+    
+// }
+// toolbar-fade-header [toolbar-fake] .toolbar-background { 
+//     opacity: 0; 
+//     transition: opacity 0.4s ease-in-out;
+// }
+// toolbar-fade-header [toolbar-fake] .toolbar-background.fill {
+//     opacity: 1;
+//     transition: opacity 0.6s ease-in-out;
+// }
+
+toolbar-fade-header .toolbar { overflow: visible; position: fixed; top: 0px; transform: translate3d(0, 0px, 0);}
+toolbar-fade-header .toolbar-background { height: 205px; }
+toolbar-fade-header .toolbar-content { position: relative; }
+toolbar-fade-header ion-title { 
+    position: relative; 
+    transform-origin: calc(-1.5%);
+    transform: translate3d( 0, calc(100% - 56px), 0) scale3d(1,1,1);
+}
+
+toolbar-fade-header.top .toolbar-title {
+    transform: scale(1, 1);
+    top: 0px !important;
+    //transition: all 0.2s ease-in-out;
+}
+toolbar-fade-header.top .toolbar,
+toolbar-fade-header.top toolbar-background  {
+    height: 56px !important;
+}
+
+
+toolbar-fade-header.hide-toolbar .toolbar {
+    transform: translate3d(0, -56px, 0);
+    transition: transform 0.2s ease-in-out;
+}
+
+toolbar-fade-header.show-toolbar .toolbar {
+    transform: translate3d(0, 0px, 0);
+    transition: transform 0.2s ease-in-out;
+}
