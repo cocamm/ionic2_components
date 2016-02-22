@@ -1,0 +1,19 @@
+[coordinator-layout] {
+    collapse-toolbar {
+        
+        background-color: #387ef5;
+        height: 194px;
+        display: block;
+        position: relative;
+
+    }
+    ion-toolbar { position: fixed !important; }
+    ion-toolbar .toolbar-background { background: transparent !important; }
+    
+    ion-title {
+        transform-origin: top;
+        transform: translateY(140px);
+        padding-left: 50px;
+        .toolbar-title { color: #fff; transform: scale(1.5, 1.5) translateX(24px); padding-left: 50px; }
+    }
+}

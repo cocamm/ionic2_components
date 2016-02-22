@@ -1,0 +1,34 @@
+$default-height: 205px;
+$default-toolbar-height: 56px;
+
+toolbar-scroll {
+    display: block;
+    height: $default-height;
+    background-color: #32db64;
+    
+    .toolbar { overflow: visible;  transform: translate3d(0px, 0px, 0px);}
+    
+    .toolbar-title {
+        position: relative;
+        //transform: translateY(150px);
+    }
+}
+
+toolbar-scroll.top {
+    height: $default-toolbar-height;
+    transition: height 0.2s ease-in-out;
+    
+    .toolbar-background {
+        height: $default-toolbar-height !important;
+        transition: height 0.2s ease-in-out;
+    }
+    
+    .toolbar-title {
+        transform: translateY(0px) !important;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    //.toolbar { overflow: visible; position: relative !important; }
+}
+
+//.toolbar-top scroll-content { padding-top: 60px;}

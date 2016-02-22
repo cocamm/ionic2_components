@@ -1,0 +1,52 @@
+toolbar-fade-header {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    z-index: 99;
+} 
+
+toolbar-header-picture {
+    height: 100%;
+    display: block;
+    
+}
+toolbar-background {
+    display: block;
+    height: 205px;
+    background-color: #32db64;
+}
+toolbar-fade-header [toolbar-fake] {
+    position: fixed;       
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+}
+toolbar-fade-header .toolbar { overflow: visible; position: fixed !important; top: 0px;}
+toolbar-fade-header .toolbar-content { position: relative; }
+toolbar-fade-header .toolbar-title { 
+    position: relative; 
+    transform-origin: calc(-1.5%); 
+    top: calc(100% - 56px); 
+    transform: scale(1.5, 1.5);
+}
+
+toolbar-fade-header.top .toolbar-title{
+    transform: scale(1, 1);
+    top: 0px !important;
+    //transition: all 0.2s ease-in-out;
+}
+
+toolbar-fade-header.top [toolbar-fake],
+toolbar-fade-header.top .toolbar,
+toolbar-fade-header.top toolbar-background  {
+    height: 56px !important;
+    //transition: height 0.2s ease-in-out;
+}
+toolbar-fade-header.top [toolbar-fake] {
+    //position: relative !important;
+}
+
+toolbar-fade-header.top [toolbar-scroll] {
+    //position: relative !important;
+}
