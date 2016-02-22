@@ -85,20 +85,6 @@ export class ToolbarFadeHeader {
             this.background.classList.remove('fill');
         }
         
-        if(difference < 56) {
-            
-            
-            // if(this.el.nativeElement.classList.contains('show-toolbar')) {
-            //     this.el.nativeElement.classList.remove('show-toolbar');
-            // }
-            // this.el.nativeElement.classList.add('hide-toolbar');
-        } else if(difference >= -10) {
-            // if(this.el.nativeElement.classList.contains('hide-toolbar')) {
-            //     this.el.nativeElement.classList.remove('hide-toolbar');
-            // }
-            // this.el.nativeElement.classList.add('show-toolbar');
-        }
-        
     }
       
     ratio(dim) {
