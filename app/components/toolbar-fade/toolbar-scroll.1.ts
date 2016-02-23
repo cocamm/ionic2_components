@@ -80,23 +80,14 @@ export class ToolbarFadeHeader {
             self.handleStyle(self.baseDimensions);
 
             self.content.addScrollEventListener(function() {
-                if (!self.ticking) {
-                    window.requestAnimationFrame(function() {
-                        self.reloadStyles();
-                        self.ticking = false;
-                    });
-                }
-                self.ticking = true;
+                self.reloadStyles();
             });
 
         }, 250);
     }
 
     reloadStyles() {
-        var self = this;
-        window.requestAnimationFrame(function() {
-            self.handleStyle(self.el.nativeElement.getBoundingClientRect());
-        });
+        this.handleStyle(this.el.nativeElement.getBoundingClientRect());
     }
 
     handleStyle(dim) {
