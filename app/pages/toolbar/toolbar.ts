@@ -1,6 +1,6 @@
 import {Page, NavController} from 'ionic-framework/ionic';
 
-import {ToolbarFadeHeader} from '../../components/toolbar-fade/toolbar-scroll';
+import {ToolbarFadeHeader} from '../../components/toolbar-fade/toolbar-scroll.1';
 
 @Page({
     templateUrl: 'build/pages/toolbar/toolbar.html',
