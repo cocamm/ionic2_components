@@ -27,19 +27,22 @@ toolbar-background {
 //     transition: background 0.3s ease-in-out;
 // }
 
-toolbar-fade-header .toolbar { overflow: visible; position: fixed; top: 0px; transform: translate3d(0, 0px, 0); -webkit-transform: translateZ(0); }
-toolbar-fade-header .toolbar-background { height: 205px; -webkit-transform: translateZ(0); }
+toolbar-fade-header .toolbar { overflow: visible; position: fixed; top: 0px; transform: translate3d(0, 0px, 0); -webkit-transform: translate3d(0, 0px, 0); }
+toolbar-fade-header .toolbar-background { height: 205px; -webkit-transform: translateZ(0); transform: translateZ(0);}
 toolbar-fade-header .toolbar-content { position: relative; }
 toolbar-fade-header ion-title { 
     position: relative; 
     transform-origin: calc(-1.5%);
+    --webkit-transform-origin: calc(-1.5%);
     transform: translate3d( 0, calc(100% - 56px), 0) scale3d(1,1,1);
+    -webkit-transform:translate3d( 0, calc(100% - 56px), 0) scale3d(1,1,1);
 }
 
 toolbar-fade-header.top .toolbar-title {
     transform: scale(1, 1);
     top: 0px !important;
     -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     //transition: all 0.2s ease-in-out;
 }
 toolbar-fade-header.top .toolbar,
@@ -50,17 +53,23 @@ toolbar-fade-header.top toolbar-background  {
 
 toolbar-fade-header.hide-toolbar .toolbar {
     transform: translate3d(0, -56px, 0);
+    -webkit-transform: translate3d(0, -56px, 0);
     transition: transform 0.2s ease-in-out;
+    -webkit-transition: transform 0.2s ease-in-out;
 }
 
 toolbar-fade-header.show-toolbar .toolbar {
     transform: translate3d(0, 0px, 0);
+    -webkit-transform: translate3d(0, 0px, 0);
     transition: transform 0.2s ease-in-out;
+    -webkit-transition:  transform 0.2s ease-in-out;
+    
 }
 
 toolbar-fade-header .toolbar .toolbar-background.fill .parallax-container {
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
 }
 
 .parallax-container {
@@ -68,8 +77,10 @@ toolbar-fade-header .toolbar .toolbar-background.fill .parallax-container {
     overflow: hidden;
     height: 100%;
     transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
     opacity: 1;
     -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     
 }
 .parallax {

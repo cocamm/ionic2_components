@@ -1,21 +1,18 @@
 import {Directive, Component, ElementRef, NgZone} from 'angular2/core';
 
-import {IONIC_DIRECTIVES, IonicApp, Content} from 'ionic-framework/ionic';
-
-@Component({
-    selector: 'parallax',
-    template: `
-        <div class="parallax-container">
-            <div class="parallax"><img src="./img/pao.jpg"></div>
-        </div>`
-})
-class Parallax {
-    constructor(private el: ElementRef) { }
-}
+import {IONIC_DIRECTIVES, IonicApp, Content, Gesture} from 'ionic-framework/ionic';
 
 @Component({
     selector: 'toolbar-fade-header',
     template: `
+        <ion-toolbar class="fake-background" primary>
+            <ion-buttons left class="buttons">
+                <button>
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-buttons>
+            <ion-title>Ionic Title</ion-title>
+        </ion-toolbar>
         <ion-toolbar toolbar-scroll primary>
             <ion-buttons left>
                 <button>
@@ -29,32 +26,28 @@ class Parallax {
                 </button>
             </ion-buttons>
         </ion-toolbar>
+       
     `,
     directives: [IONIC_DIRECTIVES]
 })
-export class ToolbarFadeHeader {
+export class ToolbarHeader {
 
     private titleZoom: number = 1.5;
     private baseDimensions: any;
     private legacyToolbarHeight: number;
     private title: any;
-    private background: any;
+    private background: HTMLElement;
     private content: Content;
     private toolbar: any;
     private parallax: any;
 
-    private parallaxHtml: string = `<div class="parallax-container">
-                                        <div class="parallax"><img src="./img/pao.jpg"></div>
-                                    </div>`;
-
-    constructor(private el: ElementRef, private app: IonicApp) {
+    constructor(private el: ElementRef, private app: IonicApp, private zone: NgZone) {
         
     }
 
     ngOnInit() {
         this.toolbar = this.el.nativeElement.querySelector('[toolbar-scroll]');
-        this.background = this.toolbar.querySelector('.toolbar-background');
-        this.background.innerHTML = this.parallaxHtml;
+        this.background = this.el.nativeElement.querySelector('.fake-background');
         this.parallax = this.background.querySelector('.parallax img');
         this.title = this.toolbar.querySelector('ion-title');
         this.content = this.app.getRegisteredComponent(Content);
@@ -65,8 +58,8 @@ export class ToolbarFadeHeader {
 
         window.setTimeout(() => {
             
-            let rgb = this.getAverageRGB(this.parallax);
-            this.background.style.background = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', 1)';
+            //let rgb = this.getAverageRGB(this.parallax);
+            //this.background.style.background = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', 1)';
             
             var header = self.el.nativeElement;
             var width = header.getBoundingClientRect().width;
@@ -75,19 +68,21 @@ export class ToolbarFadeHeader {
 
             self.legacyToolbarHeight = self.getDimensions(self.toolbar).height;
             self.handleStyle();
-
-            self.content.addScrollEventListener(function() {
-                self.reloadStyles();
+            console.log(self.content);
+            self.content.getNativeElement().children[0].removeEventListener('scroll');
+            self.zone.runOutsideAngular(function() {
+                self.content.getNativeElement().children[0].addEventListener('scroll', function() {
+                    self.reloadStyles();
+                });
             });
 
-        }, 250);
+        }, 121);
     }
 
     latestKnownScrollY = 0;
     ticking = false;
     
     reloadStyles() {
-        
         this.latestKnownScrollY = this.content.getContentDimensions().scrollTop;
         this.requestTick();
     }
@@ -109,28 +104,61 @@ export class ToolbarFadeHeader {
         let bottom = 205 - currentScroll;
            
         let difference = bottom - this.baseDimensions.top;
-        var parallax_dist = this.baseDimensions.height - difference;
-        var parallax = Math.round((parallax_dist * (difference / (difference + this.baseDimensions.height))));
+        
+        if (difference <= 56) {
+            this.toolbar.style.opacity = '0';
+            this.background.style.opacity = '0';
+        }
+        
+        // var parallax_dist = this.baseDimensions.height - difference;
+        // var parallax = Math.round((parallax_dist * (difference / (difference + this.baseDimensions.height))));
 
-        if (difference >= 56) {
-            this.background.style.transform = 'translate3d(0,' + (difference - this.baseDimensions.height) + 'px,0)';
-            this.title.style.transform = 'translate3d(0,' + (difference - this.legacyToolbarHeight) + 'px,0) ' +
-                'scale(' + ((this.titleZoom - 1) * this.ratio(bottom, 205) + 1) + ',' + ((this.titleZoom - 1) * this.ratio(bottom, 205) + 1) + ')';
-            this.toolbar.style.transform = 'translate3d(0,0,0)';
-            this.parallax.style.transform = 'translate3d(-50%,' + parallax + 'px,0)';
-        } else {
+        // if (difference >= 56) {
+        //     this.background.style.transform = 'translate3d(0,' + (difference - this.baseDimensions.height) + 'px,0)';
+        //     this.title.style.transform = 'translate3d(0,' + (difference - this.legacyToolbarHeight) + 'px,0) ' +
+        //         'scale(' + ((this.titleZoom - 1) * this.ratio(bottom, 205) + 1) + ',' + ((this.titleZoom - 1) * this.ratio(bottom, 205) + 1) + ')';
+        //     this.toolbar.style.transform = 'translate3d(0,0,0)';
+        //     this.parallax.style.transform = 'translate3d(-50%,' + parallax + 'px,0)';
+        // } else {
             
-            this.title.style.transform = 'translate3d(0,0,0)  scale(1,1)';
-            this.toolbar.style.transform = 'translate3d(0,' + (difference - this.legacyToolbarHeight) + 'px,0)';
-        }
+        //     this.title.style.transform = 'translate3d(0,0,0)  scale(1,1)';
+        //     this.toolbar.style.transform = 'translate3d(0,' + (difference - this.legacyToolbarHeight) + 'px,0)';
+        // }
 
-        if (difference <= 130) {
-            if (!this.background.classList.contains('fill')) {
-                this.background.classList.add('fill');
-            }
-        } else {
-            this.background.classList.remove('fill');
-        }
+        // if (difference <= 130) {
+        //     if (!this.background.classList.contains('fill')) {
+        //         this.background.classList.add('fill');
+        //     }
+        // } else {
+        //     this.background.classList.remove('fill');
+        // }
+        
+        // this.ticking = false; 
+        // let currentScroll = this.content.getContentDimensions().scrollTop;        
+        // let bottom = 205 - currentScroll;
+        // let difference = bottom - this.baseDimensions.top;
+        // var parallax_dist = this.baseDimensions.height - difference;
+        // var parallax = Math.round((parallax_dist * (difference / (difference + this.baseDimensions.height))));
+        // this.parallax.style.transform = 'translate3d(-50%,' + parallax + 'px,0)';
+        
+        // if (difference >= 56) {
+        //     // this.background.style.transform = 'translate3d(0,' + (difference - this.baseDimensions.height) + 'px,0)';
+        //     //this.title.style.transform = 'translate3d(0,' + (difference - 56) + 'px,0) ' ;//+
+        //         //'scale(' + ((this.titleZoom - 1) * this.ratio(bottom, 205) + 1) + ',' + ((this.titleZoom - 1) * this.ratio(bottom, 205) + 1) + ')';
+        //     this.toolbar.style.transform = 'translate3d(0, -205px, 0)';
+        //     // this.parallax.style.transform = 'translate3d(-50%,' + parallax + 'px,0)';
+        // } else {
+        //     //this.title.style.transform = 'translate3d(0,0,0)';//  scale(1,1)'
+        //     this.toolbar.style.transform = 'translate3d(0,' + (-205 + (difference - this.legacyToolbarHeight) ) + 'px, 0)';
+        // }
+        
+        // if (difference <= 130) {
+        //     if (!this.background.classList.contains('fill')) {
+        //         this.background.classList.add('fill');
+        //     }
+        // } else {
+        //     this.background.classList.remove('fill');
+        // }
 
     }
 

@@ -1,0 +1,16 @@
+toolbar-fade-header {
+    height: 205px;
+    display: block;
+    background: #387ef5;
+}
+
+.fake-background { 
+    transform: translate3d(0px, 149px, 0px);
+    .toolbar-background { opacity: 0 };
+}
+
+[toolbar-scroll] {
+    position: fixed;
+    transform: translate3d(0px, -56px, 0px);
+    .toolbar-background { opacity: 0 };
+}
