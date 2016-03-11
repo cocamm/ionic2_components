@@ -1,0 +1,120 @@
+toolbar {
+    display: block;
+    overflow: visible;
+    position: relative;
+    z-index: 99;
+    height: 205px;
+} 
+
+toolbar-header-picture img {
+    height: 100%;
+    display: block;
+}
+
+toolbar-background {
+    display: block;
+    background-color: rgba(56,126,245, 0);
+}
+
+.fake-background { 
+    height: 205px; 
+    background-color: rgba(56,126,245, 1);
+}
+
+.fake-background .fake-title {
+    position: absolute;
+    bottom: 15px;
+    color: #fff;
+    padding: 0 12px;
+    font-size: 2rem;
+    font-weight: 500;
+    left: 38px;
+    z-index: 999;
+    opacity: 1;
+}
+
+toolbar .toolbar {
+    position: fixed;
+    transform: translate3d(0, -205px, 0); 
+    -webkit-transform: translate3d(0, -205px, 0);    
+    will-change: transform;
+}
+
+toolbar .toolbar ion-title .toolbar-title { opacity: 0; }
+
+toolbar .toolbar .toolbar-background {
+    opacity: 0;
+}
+toolbar .toolbar.fill .toolbar-background {
+    opacity: 1;
+}
+
+toolbar .toolbar.fill ion-title {
+    opacity: 1;
+}
+
+.fake-background.fill .fake-title {
+    opacity: 0;
+}
+
+toolbar .fake-background.fill .parallax-container img {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+}
+
+toolbar .fake-background .parallax-container img {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+    -webkit-transition: opacity 0.2s ease-in-out;
+}
+
+.parallax-container {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    
+}
+.parallax {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.parallax img {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+toolbar [fab],
+toolbar [fab-bottom] {
+    bottom: -33px;
+}
+
+toolbar [fab] {
+    -webkit-transform: translate3d(0, 0, 0) rotateZ(0deg) scale(1) !important;
+    transform: translate3d(0, 0, 0) rotateZ(0deg) scale(1) !important;
+}
+
+toolbar [fab].hidden {
+    -webkit-transform: translate3d(0, 0, 0) rotateZ(0deg) scale(0) !important;
+    transform: translate3d(0, 0, 0) rotateZ(0deg) scale(0) !important;
+}
+
+
+
