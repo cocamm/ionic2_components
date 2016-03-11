@@ -1,16 +1,18 @@
 import {Page, NavController, IonicApp} from 'ionic-angular';
 import {ContentChild} from 'angular2/core';
-import {SnackbarManager, Snackbar} from '../../components/snackbar/snackbar';
+// import {SnackbarManager, Snackbar} from '../../components/snackbar/snackbar';
+import {Snackbar, SnackbarComponent} from '../../components/snackbar/snackbar.1';
 
 @Page({
-  templateUrl: 'build/pages/page1/page1.html'
+  templateUrl: 'build/pages/page1/page1.html',
+  directives: [SnackbarComponent],
+  providers: [Snackbar]
 })
 export class Page1 {
     
-    private snackbar: Snackbar;
     count: number = 0;
     
-    constructor(private nav: NavController, private mng: SnackbarManager) {
+    constructor(private nav: NavController, private snackbar: Snackbar) {
     }
     
     ngAfterViewInit() {
@@ -19,17 +21,19 @@ export class Page1 {
     
     showSimpleSnackbar() {
         
-        let snackbar = new Snackbar({
-           message: 'Test Message',
-           action: {
-               text: "UNDO",
-               handler: () => {
-                   alert("UNDO");
-               }
-           }
-        });
+        this.snackbar.make("Teste " + this.count++).show();
         
-        this.mng.show(this.nav, snackbar);
+        // let snackbar = new Snackbar({
+        //    message: 'Test Message',
+        //    action: {
+        //        text: "UNDO",
+        //        handler: () => {
+        //            alert("UNDO");
+        //        }
+        //    }
+        // });
+        
+        // this.mng.show(this.nav, snackbar);
     }
         
 }

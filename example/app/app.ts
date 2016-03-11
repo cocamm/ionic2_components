@@ -4,11 +4,12 @@ import {TabsPage} from './pages/tabs/tabs';
 // https://angular.io/docs/ts/latest/api/core/Type-interface.html
 import {Type} from 'angular2/core';
 
-import {SnackbarManager} from './components/snackbar/snackbar';
+// import {SnackbarManager} from './components/snackbar/snackbar';
+import {Snackbar} from './components/snackbar/snackbar.1';
 
 @App({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
-  providers: [SnackbarManager],
+  providers: [Snackbar],
   config: {}
 })
 export class MyApp {
