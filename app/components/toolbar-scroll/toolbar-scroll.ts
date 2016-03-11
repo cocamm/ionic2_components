@@ -73,6 +73,7 @@ export class ToolbarScroll {
             if(this._mainColor && this._mainColor == 'image') {
                 let rgb = this.getAverageRGB(this.parallax);
                 this.background.style.background = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', 1)';
+                this.toolbarBackground.style.background = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ', 1)';
             } else {                
                 this.background.style.background = this.toolbar.querySelector('.toolbar-background').style.background;
             }

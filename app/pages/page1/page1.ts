@@ -17,8 +17,7 @@ export class Page1 {
         
     }
     
-    showSimpleSnackbar() { 
-        
+    showSimpleSnackbar() {
         
         let snackbar = new Snackbar({
            message: 'Test Message',
