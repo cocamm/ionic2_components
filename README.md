@@ -1,7 +1,7 @@
 # Custom Ionic2 Components
 <h2>Snackbar</h2>
 <br />
-<img src="/resources/screenshots/snackbar.gif" />
+<img src="/example/resources/screenshots/snackbar.gif" />
 <br />
 I tried to make it simple.
 <br />
