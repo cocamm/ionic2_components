@@ -63,8 +63,8 @@ this.mng.show(this.nav, snackbar);
 <br />
 <h2>Toolbar Scroll</h2>
 <br />
-<img src="/resources/screenshots/toolbarscroll.gif" style="float: left;"/>
-<img src="/resources/screenshots/toolbarscroll-image.gif" style="float: left;"/>
+<img src="/example/resources/screenshots/toolbarscroll.gif" style="float: left;"/>
+<img src="/example/resources/screenshots/toolbarscroll-image.gif" style="float: left;"/>
 <div style="clear: both"></div> 
 <br />
 I wanted something like the coordinator layout in native android applications.<br />
