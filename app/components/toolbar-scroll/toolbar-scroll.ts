@@ -2,46 +2,6 @@ import {Directive, Component, ElementRef, NgZone, Input} from 'angular2/core';
 
 import {IONIC_DIRECTIVES, IonicApp, Content} from 'ionic-angular';
 
-(function() {
-  var rafLastTime = 0;
-  const win: any = window;
-  if (!win.requestAnimationFrame) {
-    win.requestAnimationFrame = function(callback, element) {
-      var currTime = Date.now();
-      var timeToCall = Math.max(0, 16 - (currTime - rafLastTime));
-
-      var id = window.setTimeout(function() {
-        callback(currTime + timeToCall);
-      }, timeToCall);
-
-      rafLastTime = currTime + timeToCall;
-      return id;
-    };
-  }
-
-  if (!win.cancelAnimationFrame) {
-    win.cancelAnimationFrame = function(id) { clearTimeout(id); };
-  }
-})();
-
-export const raf = window.requestAnimationFrame.bind(window);
-export const cancelRaf = window.cancelAnimationFrame.bind(window);
-
-
-export function rafFrames(framesToWait, callback) {
-  framesToWait = Math.ceil(framesToWait);
-
-  if (framesToWait < 2) {
-    raf(callback);
-
-  } else {
-    setTimeout(() => {
-      raf(callback);
-    }, (framesToWait - 1) * 17);
-  }
-}
-
-
 @Component({
     selector: 'toolbar',
     template: `
@@ -54,7 +14,7 @@ export function rafFrames(framesToWait, callback) {
         <ng-content></ng-content>`,
     directives: [IONIC_DIRECTIVES]
 })
-export class ToolbarHeader {
+export class ToolbarScroll {
 
     private titleZoom: number = 1.5;
     private baseDimensions: any;
@@ -70,6 +30,7 @@ export class ToolbarHeader {
     
     private toolbarTitle: any;
     private _mainColor: string;
+    private _contentId: string;
     
     //toolbar or image
     @Input()
@@ -80,6 +41,15 @@ export class ToolbarHeader {
     set mainColor(value: string) {
         this._mainColor = value;
     }
+    
+    @Input()
+    get contentId(): string {
+        return this._contentId;
+    }
+    
+    set contentId(value: string) {
+        this._contentId = value;
+    }
 
     constructor(private el: ElementRef, private app: IonicApp, private zone: NgZone) {        
     }
@@ -89,7 +59,7 @@ export class ToolbarHeader {
         this.background = this.el.nativeElement.querySelector('.fake-background');
         this.parallax = this.background.querySelector('.parallax img');
         this.title = this.toolbar.querySelector('.toolbar-title');
-        this.content = this.app.getComponent("toolbar-example");
+        this.content = this.app.getComponent(this._contentId);
         this.toolbarTitle = this.title.textContent;
         this.fakeTitle = this.el.nativeElement.querySelector('.fake-title');
         this.toolbarBackground = this.toolbar.querySelector('.toolbar-background');
@@ -115,9 +85,6 @@ export class ToolbarHeader {
             self.legacyToolbarHeight = self.getDimensions(self.toolbar).height;
             self.handleStyle();
             
-            // self.content.addScrollListener(function() {
-            //      self.reloadStyles();
-            // });
             self.content.getNativeElement().children[0].removeEventListener('scroll');
             self.zone.runOutsideAngular(function() {
                 self.content.getNativeElement().children[0].addEventListener('scroll', function() {
