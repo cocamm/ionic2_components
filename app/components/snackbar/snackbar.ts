@@ -1,7 +1,7 @@
 import {Component, Renderer, ElementRef, Injectable, Inject, Optional, forwardRef} from 'angular2/core';
 import {NgFor, NgIf} from 'angular2/common';
 
-import {Animation, Transition, TransitionOptions, Config, Icon, NavParams, ViewController, NavController, Events} from 'ionic-framework/ionic';
+import {Animation, Transition, TransitionOptions, Config, Icon, NavParams, ViewController, NavController, Events, IonicApp} from 'ionic-angular';
 
 
 // Config.setModeConfig('ios', {
@@ -54,9 +54,9 @@ export class SnackbarManager {
     private active: boolean = false;
     private nav: NavController;
     
-    constructor(events: Events, config: Config) {        
-        events.subscribe('snackbard:dimiss', () => {
-            this.dismiss();
+    constructor(events: Events, config: Config, private app: IonicApp) {        
+        events.subscribe('snackbar:hide', () => {
+            this.hide();
         });
         
         config.set('ios', 'snackbarEnter', 'snackbar-slide-in');
@@ -74,7 +74,12 @@ export class SnackbarManager {
         }
     }
     
-    private dismiss() {
+    dismiss() {
+        console.log(this.app.getComponent("snackbarcontainer"));
+        this.app.getRegisteredComponent(SnackbarComponent).dismiss();
+    }
+    
+    private hide() {
         this.queue.shift();
         this.active = false;
         
@@ -128,7 +133,7 @@ class SnackbarView extends ViewController {
 @Component({
     selector: 'snackbar-container',
     template:`
-        <div class="snackbar-wrapper" #snackbarcontainer>
+        <div class="snackbar-wrapper">
             <div class="snackbar-content">
                 {{notification.message}}
             </div>
@@ -159,7 +164,6 @@ class SnackbarComponent {
         let duration = this.notification.duration ? this.notification.duration : 3500;
         this.htmlEle = this.elementRef.nativeElement.querySelector('.snackbar-wrapper');
         
-        
         setTimeout(() => {
             this.dismiss();
         }, duration);
@@ -183,13 +187,12 @@ class SnackbarComponent {
     }
 
     dismiss(): Promise<any> {   
-        
         return this._viewCtrl.dismiss(null, 'snackbar');
     }
     
     ngOnDestroy() {        
         this.htmlEle.classList.remove('snackbar-leave');
-        this.events.publish('snackbard:dimiss', this.notification);
+        this.events.publish('snackbar:hide', this.notification);
     }
 }
 

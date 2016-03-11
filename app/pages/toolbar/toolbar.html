@@ -1,7 +1,28 @@
 
-<ion-content id="toolbar-example">
-
-    <toolbar-fade-header></toolbar-fade-header>
+<ion-content id="toolbar-example" tappable>
+    
+    <!--<toolbar-fade-header></toolbar-fade-header>-->
+        
+    <toolbar mainColor="toolbar">
+        <img src="./img/pao.jpg">
+        <ion-toolbar primary>
+            <ion-buttons left>
+                <button>
+                    <ion-icon name="arrow-back"></ion-icon>
+                </button>
+            </ion-buttons>
+            <ion-title>Ionic Title</ion-title>
+            <ion-buttons end>
+                <button> 
+                    <ion-icon name="more"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-toolbar>
+        <button fab primary fab-bottom fab-right>
+            <ion-icon name="add"></ion-icon>
+        </button>
+    </toolbar>
+    
     <div class="content-scroll">
         <ion-card>
             <ion-card-content>

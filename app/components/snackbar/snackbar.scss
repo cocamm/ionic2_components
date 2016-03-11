@@ -36,10 +36,10 @@ snackbar-container {
     
     font-size: 14px;
     overflow: hidden;
-    -webkit-transform: translate3d(0, 0, 0) rotateZ(0deg);
-            transform: translate3d(0, 0, 0) rotateZ(0deg);
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    -webkit-transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
     background-color: #323232;
     color: rgb(250,250,250);
 }
@@ -65,15 +65,25 @@ snackbar-container {
 }
 
 ion-content button[fab-bottom] {
+    -webkit-transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
     transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
     -webkit-transform: translate3d(0, 0, 0) rotateZ(0deg);
             transform: translate3d(0, 0, 0) rotateZ(0deg);
 }
 
 ion-content.snackbar-open button[fab-bottom] {
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     -webkit-transform: translate3d(0, -54px, 0);
     transform: translate3d(0, -54px, 0);
+}
+
+
+ion-content.snackbar-open .snackbar-wrapper{
+    -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
 }
  
 // .snackbar-wrapper {
