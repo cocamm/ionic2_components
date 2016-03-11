@@ -1,7 +1,7 @@
 # Custom Ionic2 Components
 <h2>Snackbar</h2>
 <br />
-<img src="/cocamm/ionic2_components/raw/master/resources/screenshots/snackbar.gif" />
+<img src="/resources/screenshots/snackbar.gif" />
 <br />
 I tried to make it simple.
 <br />
@@ -63,7 +63,7 @@ this.mng.show(this.nav, snackbar);
 <br />
 <h2>Toolbar Scroll</h2>
 <br />
-<img src="/cocamm/ionic2_components/raw/master/resources/screenshots/toolbarscroll.gif" />
+<img src="/resources/screenshots/toolbarscroll.gif" />
 <br />
 I wanted something like the coordinator layout in native android applications.<br />
 I created to use in an own project. So, it has some fixed values like some heights, positions..etc.<br />
